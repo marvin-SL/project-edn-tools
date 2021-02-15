@@ -20,7 +20,7 @@ echo [CLIENT] Game file decrypter
 echo The purpose of this script is to decrypt all the game files for modding or running the client
 echo This script will:
 echo   - Create (or error if it already exist) the directory %game%
-echo   - Copy all encrypted files from %1 into %game%
+echo   - Copy all encrypted files from %~dp0 into %game%
 echo   - Decrypt the files
 echo.
 echo You may exit the program now or continue if you would like to perform these actions
@@ -33,7 +33,7 @@ echo.
 rem "check input"
 
 echo Checking for files...
-if not exist %1\System goto BadInput
+if not exist %~dp0System goto BadInput
     
 echo Directory is correct!
 
@@ -62,7 +62,7 @@ mkdir %game%
 
 echo Copying files...
 
-robocopy %1\ %game% *.poo *.ini *.jof *.rc *.ukx *.ASE *.map *.unr *.uax *.usx *.u *.utx *.int /s /xf !exclusions!
+robocopy %~dp0 %game% *.poo *.ini *.jof *.rc *.ukx *.ASE *.map *.unr *.uax *.usx *.u *.utx *.int /s /xf !exclusions!
 
 rem "handle version.ini manually"
 del %game%\Version.ini 2>nul
@@ -128,7 +128,7 @@ exit
 
 rem "fail case"
 :BadInput
-    echo %1 does not appear to be game install directory! 
+    echo %~dp0 does not appear to be game install directory! 
     echo Make sure the folder you use this script on contains the \System and \Mutmap directories!
     pause
     exit 
