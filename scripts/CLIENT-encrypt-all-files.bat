@@ -18,7 +18,7 @@ echo NOTE: Please ensure you have ran CLIENT-remove-game-guard.bat and CLIENT-re
 echo This script will:
 echo   - Create (or error if it already exist) the directory %game%
 echo   - Copy all files from %gamed% into %game%
-echo   - Get the md5 hashes of GF.dll and Exteel.exe from %1
+echo   - Get the md5 hashes of GF.dll and Exteel.exe from %~dp0
 echo   - Re-encrypt the files
 echo.
 echo You may exit the program now or continue if you would like to perform these actions
@@ -31,7 +31,7 @@ echo.
 rem "check input"
 
 echo Checking for files...
-if not exist %1\System goto BadInput
+if not exist %~dp0System goto BadInput
     
 echo Directory is correct!
 
@@ -81,13 +81,13 @@ rem "update md5"
 echo Updating MD5 hashes in version.ini...
 
 
-for /f "skip=1 tokens=* delims=" %%# in ('certutil -hashfile %1\System\GF.dll MD5') do (
+for /f "skip=1 tokens=* delims=" %%# in ('certutil -hashfile %~dp0System\GF.dll MD5') do (
 	if not defined gfhash (
 		for %%Z in (%%#) do set gfhash=!gfhash!%%Z
 	)
 )
 
-for /f "skip=1 tokens=* delims=" %%# in ('certutil -hashfile %1\System\Exteel.exe MD5') do (
+for /f "skip=1 tokens=* delims=" %%# in ('certutil -hashfile %~dp0System\Exteel.exe MD5') do (
 	if not defined gamehash (
 		for %%Z in (%%#) do set gamehash=!gamehash!%%Z
 	)
@@ -145,7 +145,7 @@ exit
 
 rem "fail case"
 :BadInput
-    echo %1 does not appear to be game install directory! 
+    echo %~dp0 does not appear to be game install directory! 
     echo Make sure the folder you use this script on contains the \System and \Mutmap directories!
     pause
     exit 
